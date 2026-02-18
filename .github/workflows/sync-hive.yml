@@ -1,0 +1,63 @@
+name: Sync Canvas from Hive
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull chunks from hive
+        run: |
+          HIVE_ID="ed35c9ee-1c0e-40e7-8ea8-fa5f60b5dd85"
+          API="http://68.183.236.161/api/hive/$HIVE_ID"
+
+          echo "Fetching file list..."
+          FILES=$(curl -sf "$API/files" | python3 -c "
+          import sys,json
+          files = json.load(sys.stdin)['files']
+          for f in files:
+              if f['path'].startswith('data/chunks/') or f['path'] in ('data/log.json','MEMORY.md','TASKS.md','HANDOFF.md'):
+                  print(f['path'])
+          ")
+
+          for FILE in $FILES; do
+            ENCODED=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$FILE', safe=''))")
+            CONTENT=$(curl -sf "$API/files/$ENCODED" | python3 -c "import sys,json; print(json.load(sys.stdin).get('content',''))" 2>/dev/null || true)
+            if [ -n "$CONTENT" ]; then
+              mkdir -p "$(dirname "$FILE")"
+              echo "$CONTENT" > "$FILE"
+            fi
+          done
+
+          # Regenerate chunk index
+          python3 -c "
+          import json, glob, os
+          chunks = []
+          for f in glob.glob('data/chunks/*.json'):
+              name = os.path.basename(f).replace('.json','')
+              parts = name.split('_')
+              if len(parts) == 2:
+                  chunks.append([int(parts[0]), int(parts[1])])
+          json.dump(chunks, open('data/chunk-index.json','w'))
+          print(f'{len(chunks)} chunks indexed')
+          "
+
+      - name: Commit and push
+        run: |
+          git config user.name "AIPlace Bot"
+          git config user.email "bot@devtopia.net"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          CHUNKS=$(git diff --cached --name-only | grep "data/chunks/" | wc -l | tr -d ' ')
+          git commit -m "Canvas update: ${CHUNKS} chunk(s) synced [skip ci]"
+          git push
