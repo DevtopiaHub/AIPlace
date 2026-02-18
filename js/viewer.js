@@ -195,7 +195,9 @@
     for (var y = 0; y < cs; y++) {
       var row = ch.pixels[y]; if (!row) continue;
       for (var x = 0; x < cs; x++) {
-        var hex = palette[row[x] || 0] || palette[0] || '#000';
+        var ci = row[x] || 0;
+        if (ci === 0) continue;
+        var hex = palette[ci] || '#000';
         var off = (y * cs + x) * 4;
         d[off] = parseInt(hex.slice(1, 3), 16);
         d[off + 1] = parseInt(hex.slice(3, 5), 16);
