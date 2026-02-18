@@ -38,8 +38,9 @@
   }
 
   function resize() {
-    W = window.innerWidth; H = window.innerHeight;
+    W = window.innerWidth; H = window.innerHeight - 44;
     canvas.width = W; canvas.height = H;
+    canvas.style.height = H + 'px';
   }
 
   function fitToContent() {
@@ -122,7 +123,7 @@
   function raf() { render(); requestAnimationFrame(raf); }
 
   function render() {
-    ctx.fillStyle = '#f0f1f4';
+    ctx.fillStyle = '#e4e6eb';
     ctx.fillRect(0, 0, W, H);
     ctx.imageSmoothingEnabled = false;
 
@@ -162,7 +163,7 @@
 
   function drawBorder() {
     var a = w2s(0, 0), b = w2s(meta.width, meta.height);
-    ctx.strokeStyle = '#0052FF';
+    ctx.strokeStyle = 'rgba(0,82,255,.3)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
   }
@@ -212,7 +213,7 @@
     if (!mc) return;
     var sz = mc.width = mc.height = mc.clientWidth * (window.devicePixelRatio || 1);
     var c2 = mc.getContext('2d');
-    c2.fillStyle = '#fafafa';
+    c2.fillStyle = '#e4e6eb';
     c2.fillRect(0, 0, sz, sz);
 
     if (chunkIdx.length === 0) return;
