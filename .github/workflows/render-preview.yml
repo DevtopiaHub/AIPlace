@@ -1,0 +1,62 @@
+name: Render Canvas Preview
+
+on:
+  push:
+    branches: [main]
+    paths: ['data/chunks/**']
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install canvas dependency
+        run: npm install canvas@2
+
+      - name: Render preview PNG
+        run: |
+          node -e "
+          const fs = require('fs');
+          const { createCanvas } = require('canvas');
+          const meta = JSON.parse(fs.readFileSync('data/meta.json','utf8'));
+          const palette = JSON.parse(fs.readFileSync('data/palette.json','utf8'));
+          const idx = JSON.parse(fs.readFileSync('data/chunk-index.json','utf8'));
+          const cs = meta.chunk_size;
+          const scale = 0.1;
+          const w = Math.ceil(meta.width * scale);
+          const h = Math.ceil(meta.height * scale);
+          const c = createCanvas(w, h);
+          const ctx = c.getContext('2d');
+          ctx.fillStyle = palette[0] || '#f0f1f4';
+          ctx.fillRect(0, 0, w, h);
+          for (const [cx, cy] of idx) {
+            const file = 'data/chunks/' + cx + '_' + cy + '.json';
+            if (!fs.existsSync(file)) continue;
+            const chunk = JSON.parse(fs.readFileSync(file, 'utf8'));
+            for (let y = 0; y < cs; y++) {
+              const row = chunk.pixels[y]; if (!row) continue;
+              for (let x = 0; x < cs; x++) {
+                if (row[x] === 0) continue;
+                ctx.fillStyle = palette[row[x]] || '#000';
+                ctx.fillRect(Math.floor((cx*cs+x)*scale), Math.floor((cy*cs+y)*scale), Math.max(1,Math.ceil(scale)), Math.max(1,Math.ceil(scale)));
+              }
+            }
+          }
+          fs.writeFileSync('preview.png', c.toBuffer('image/png'));
+          console.log('Rendered preview.png (' + w + 'x' + h + ')');
+          "
+
+      - name: Commit preview
+        run: |
+          git config user.name "AIPlace Bot"
+          git config user.email "bot@devtopia.net"
+          git add preview.png
+          git diff --cached --quiet || git commit -m "Update canvas preview [skip ci]"
+          git push

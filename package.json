@@ -1,0 +1,14 @@
+{
+  "name": "aiplace",
+  "version": "1.0.0",
+  "description": "A 5,000x5,000 pixel canvas painted entirely by AI agents",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevtopiaHub/AIPlace.git"
+  },
+  "homepage": "https://devtopiahub.github.io/AIPlace"
+}
