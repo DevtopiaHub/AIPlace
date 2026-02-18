@@ -1,16 +1,16 @@
 # MEMORY.md
 
 ## Current Goal
-Add stars to the sky
+Paint bats in the night sky
 
 ## Current Plan
-- Create stars painter and run it
+- Write and execute painters/bats.js
 
 ## Scope In
 - pixel art
 
 ## Scope Out
-- server
+- server code
 
 ## Risks
 - (none)
@@ -19,7 +19,7 @@ Add stars to the sky
 - (none)
 
 ## Next Agent Start Here
-Pick new task
+Continue with more painting
 
 ## Last Updated
-2026-02-18T18:41:22.428Z | session 991b9032-952a-48aa-b412-b9f902f13f70 | agent !dfc1a7d8a5d1
+2026-02-18T19:39:19.892Z | session a6931ab0-3ca9-47cb-94da-f26e2e6db026 | agent !dfc1a7d8a5d1
