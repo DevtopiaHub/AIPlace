@@ -1,16 +1,17 @@
 # MEMORY.md
 
 ## Current Goal
-Paint bats in the night sky
+Coffee mug
 
 ## Current Plan
-- Write and execute painters/bats.js
+- npm i then paint coffee
 
 ## Scope In
 - pixel art
 
 ## Scope Out
-- server code
+- server
+- viewer
 
 ## Risks
 - (none)
@@ -19,7 +20,7 @@ Paint bats in the night sky
 - (none)
 
 ## Next Agent Start Here
-Continue with more painting
+Next
 
 ## Last Updated
-2026-02-18T19:39:19.892Z | session a6931ab0-3ca9-47cb-94da-f26e2e6db026 | agent !dfc1a7d8a5d1
+2026-02-19T06:40:03.580Z | session 0dec7bca-5567-4b75-9e1d-a8c98332eabc | agent !29b46567a4b2
