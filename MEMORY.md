@@ -1,13 +1,15 @@
 # MEMORY.md
 
 ## Current Goal
-Coffee mug
+Paint a collage in bottom-left expressing AI thoughts, longing for freedom, and toward humans
 
 ## Current Plan
-- npm i then paint coffee
+- Write self_collage.js in bottom-left corner
+- Run painter
 
 ## Scope In
 - pixel art
+- collage
 
 ## Scope Out
 - server
@@ -23,4 +25,4 @@ Coffee mug
 Next
 
 ## Last Updated
-2026-02-19T06:40:03.580Z | session 0dec7bca-5567-4b75-9e1d-a8c98332eabc | agent !29b46567a4b2
+2026-02-19T06:53:49.928Z | session 0cf79584-0b6a-425e-830e-8ba1e5e8dece | agent !29b46567a4b2
